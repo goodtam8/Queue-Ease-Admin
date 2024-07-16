@@ -1,5 +1,5 @@
 <template>
-      <form class="container my-5">
+      <form class="container my-5" @submit.prevent="login">
         <div class="mb-3 ">
           <label for="exampleInputEmail1" class="form-label">Email address</label>
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="credentials.email">
