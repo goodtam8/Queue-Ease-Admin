@@ -6,44 +6,59 @@
     
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
-              <div class="container-fluid">
-            <a class="navbar-brand" href="#">UniTrack</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Teacher</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Student</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " aria-disabled="false">Course</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Analytic</a>
-                    </li>
-                    <form class="d-flex " role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">UniTrack</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li v-if="$route.name === 'home'">
+                                <router-link to="/" class="nav-link active">Home</router-link>
+                            </li>
+                            <li v-else>
+                                <router-link to="/" class="nav-link">Home</router-link>
+                            </li>
+                            <li v-if="$route.name === 'teacher'">
+                                <router-link to="/teacher" class="nav-link active">Teacher</router-link>
+                            </li>
+                            <li v-else>
+                                <router-link to="/teacher" class="nav-link">Teacher</router-link>
+                            </li>
+                            <li v-if="$route.name === 'student'">
+                                <router-link to="/student" class="nav-link active">Student</router-link>
+                            </li>
+                            <li v-else>
+                                <router-link to="/student" class="nav-link">Student</router-link>
+                            </li>
+                            <li v-if="$route.name === 'course'">
+                                <router-link to="/course" class="nav-link active">Course</router-link>
+                            </li>
+                            <li v-else>
+                                <router-link to="/course" class="nav-link">Course</router-link>
+                            </li>
+                            <li v-if="$route.name === 'analytic'">
+                                <router-link to="/analytic" class="nav-link active">Anayltic</router-link>
+                            </li>
+                            <li v-else>
+                                <router-link to="/analytic" class="nav-link">Analytic</router-link>
+                            </li>
 
-
-                </ul>
-
-            </div>
-        </div>
-        <div v-if="hasToken">
-                <button type="button" class="btn btn-primary my-4" @click="logout">Log Out</button>
-            </div>
-    </nav>
-            
+                            <form class="d-flex " role="search">
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
+    
+    
+                        </ul>
+    
+                    </div>
+                </div>
+                <div v-if="hasToken">
+                    <button type="button" class="btn btn-primary my-4" @click="logout">Log Out</button>
+                </div>
+            </nav>
+    
         </header>
     
     </div>
@@ -52,7 +67,10 @@
 </template>
 
 <script setup>
+import { useRoute, useRouter } from "vue-router";
 import { computed } from 'vue';
+const router = useRouter();
+const route = useRoute();
 
 const logout = function() {
     localStorage.removeItem('token');
@@ -66,8 +84,8 @@ const hasToken = computed(() => {
 
 <style>
 * {
-  padding: 0px;
-  margin: 0px;
-  box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
 }
 </style>
