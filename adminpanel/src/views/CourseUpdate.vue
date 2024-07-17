@@ -1,14 +1,31 @@
 <template>
-    <form @submit.prevent="createcourse()">
+    <form onsubmit="handleSubmit(event)">
+    
         <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"> <router-link to="/" >Home</router-link></li>
-    <li class="breadcrumb-item " > <router-link to="/course" >Course</router-link></li>
-    <li class="breadcrumb-item active" aria-current="page">Create</li>
-
-  </ol>
-</nav>
-
+    
+            <ol class="breadcrumb">
+    
+                <li class="breadcrumb-item">
+    
+                    <router-link to="/" >Home</router-link>
+    
+                </li>
+    
+                <li class="breadcrumb-item">
+    
+                    <router-link to="/course" >Course</router-link>
+    
+                </li>
+    
+                <li class="breadcrumb-item active" aria-current="page">Update</li>
+    
+    
+    
+            </ol>
+    
+        </nav>
+    
+    
     
         <div class="row">
     
@@ -44,7 +61,7 @@
     
             <label for="formGroupExampleInput" class="form-label">Start Time</label>
     
-            <input type="text" class="form-control" id="start_time" placeholder="13:00" v-model="course.start_time">
+            <input type="text" class="form-control" id="start_time" placeholder="13:00" v-model="course.start_time" disabled>
     
         </div>
     
@@ -52,7 +69,7 @@
     
             <label for="formGroupExampleInput" class="form-label">End Time</label>
     
-            <input type="text" class="form-control" id="end_time" placeholder="16:00" v-model="course.end_time">
+            <input type="text" class="form-control" id="end_time" placeholder="16:00" v-model="course.end_time" disabled>
     
         </div>
     
@@ -124,14 +141,21 @@
     
         <button type="submit" class="btn btn-primary" id="submitBtn">Create</button>
     
+        <button type="button" class="btn btn-danger" onclick="handleDelete()">Delete</button>
+    
+    
+    
     
     
     </form>
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted, computed, watch, nextTick } from 'vue'
+
+import { useRoute, useRouter } from "vue-router";
+const router = useRouter();
+const route = useRoute();
 
 const course = ref({
     cid: "",
@@ -149,97 +173,23 @@ const course = ref({
 
 
 })
-
-const router = useRouter();
-async function comparetime(course) {
-    let stime = course.value.start_time
-    let etime = course.value.end_time
-    if (etime < stime) {
-        return false
-    }
-    return true
-
-}
-
-
-
-const createcourse = async function() {
-
-
-
-    const timecomparison = await comparetime(course)
-    if (timecomparison === false) {
-        alert(JSON.stringify("The end time of the course should be later than the start time "));
-        return
-
-    }
-    const duplicatecourse = await getBooking(course)
-    if (duplicatecourse === false) {
-        alert(JSON.stringify("There are duplicate course with same id"));
-        return
-
-    }
-    // update the booking
-    const updatedBooking = await updateBooking(course);
-   
-
-
-    // display the response
-    if(updateBooking!==undefined){
-    alert(JSON.stringify(updatedBooking));
-    }else{
-        alert("You have not login in yet")
-    }
-    // redirect to the home page
-    if(updateBooking!==undefined){
-    router.push('/course');}
-}
-
-
-// A function to update a booking with www-form-urlencoded data
-async function updateBooking(booking) {
-    try {
-        const token = localStorage.getItem('token');
-
-
-        const response = await fetch(`/api/course/`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(booking.value)
-
-        });
-        
-        // convert the response to json
-        const json = await response.json();
-        // return the json
-        return json;
-    } catch (error) {
-        console.log(error)
-    }
-}
-// A function to fetch a booking
-async function getBooking(course) {
-
-    // fetch the booking
-    const response = await fetch(`/api/course/${course.value.cid}`);
+// a function to get the booking from the backend
+const getCourse = async function () {
+    // get the booking from the backend
+    const response = await fetch('/api/course/id/' + route.params.id);
     // convert the response to json
     const json = await response.json();
-    // return the json
-
-    if (json.message) {
-        return true
-    }
-    return false;
+    // log the json
+    console.log(json);
+    // set the booking
+    course.value = json;
 }
+
+onMounted(async () => {
+    // if there is an id in the route
+    if (route.params.id) {
+        getCourse();
+    }
+});
+
 </script>
-
-
-
-
-
-
-

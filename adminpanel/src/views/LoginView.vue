@@ -1,53 +1,72 @@
 <template>
-      <form class="container my-5" @submit.prevent="login">
+    <form class="container my-5" @submit.prevent="login">
+    
         <div class="mb-3 ">
-          <label for="exampleInputEmail1" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="credentials.email">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+    
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="credentials.email">
+    
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    
         </div>
+    
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" v-model="credentials.password">
+    
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+    
+            <input type="password" class="form-control" id="exampleInputPassword1" v-model="credentials.password">
+    
         </div>
-        
+    
+    
+    
         <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-  </template>
+    
+    </form>
+</template>
   
-  <script setup>
-  import { ref } from 'vue';
-  
-  const credentials = ref({
+<script setup>
+import { ref } from 'vue';
+import { useRoute, useRouter } from "vue-router";
+import { computed } from 'vue';
+const router = useRouter();
+const route = useRoute();
+
+const credentials = ref({
     email: '',
     password: ''
-  });
-  
-  const login = async () => {
+});
+
+const login = async () => {
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials.value)
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-  
-      localStorage.setItem('token', data.token);
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(credentials.value)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message);
+        }
+
+        localStorage.setItem('token', data.token);
+        router.push('/')
+
     } catch (error) {
-      alert(error);
+        alert(error);
     }
-  }
-  </script>
+}
+</script>
   
-  <style>
-    main {
-      height: 100vh; /* Set the height of the main container to full viewport height */
-    }
-  </style>
+<style>
+main {
+    height: 100vh;
+    /* Set the height of the main container to full viewport height */
+}
+</style>
   
