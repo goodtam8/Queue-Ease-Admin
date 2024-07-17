@@ -1,5 +1,5 @@
 <template>
-    <form onsubmit="handleSubmit(event)">
+    <form @submit.prevent="updateBooking()">
     
         <nav aria-label="breadcrumb">
     
@@ -139,9 +139,9 @@
     
     
     
-        <button type="submit" class="btn btn-primary" id="submitBtn">Create</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Update</button>
     
-        <button type="button" class="btn btn-danger" onclick="handleDelete()">Delete</button>
+        <button type="button" class="btn btn-danger" v-on:click="deleteCourse">Delete</button>
     
     
     
@@ -158,6 +158,7 @@ const router = useRouter();
 const route = useRoute();
 
 const course = ref({
+    _id:"",
     cid: "",
     cname: "",
     start_time: "",
@@ -182,8 +183,10 @@ const getCourse = async function () {
     // log the json
     console.log(json);
     // set the booking
-    course.value = json;
-}
+ // set the booking, copy by value instead of reference
+ course.value = { ...json };
+    // Wait for the change to get flushed to the DOM
+    await nextTick();}
 
 onMounted(async () => {
     // if there is an id in the route
@@ -191,5 +194,46 @@ onMounted(async () => {
         getCourse();
     }
 });
+
+
+// A function to update a booking with www-form-urlencoded data
+async function updateBooking() {
+    try {
+        const token = localStorage.getItem('token');
+
+
+        const response = await fetch(`/api/course/${course.value._id}`, {
+            method: 'PUT',
+            headers: {
+                
+
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(course.value)
+
+        });
+        
+        // convert the response to json
+        const json = await response.json();
+        // return the json
+        return json;
+    } catch (error) {
+        console.log(error)
+    }
+}
+const deleteCourse = async function () {
+    // post the booking to the backend
+    const response = await fetch('/api/course/' + course.value._id, {
+        method: 'DELETE'
+    });
+    // convert the response to json
+    const json = await response.json();
+    // log the json
+    console.log(json);
+    // alert the user
+    alert(JSON.stringify(json));
+    // redirect to the home page
+    router.push('/');
+}
 
 </script>
