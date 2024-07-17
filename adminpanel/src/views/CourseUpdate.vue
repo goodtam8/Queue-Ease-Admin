@@ -157,23 +157,7 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-const course = ref({
-    _id:"",
-    cid: "",
-    cname: "",
-    start_time: "",
-    end_time: "",
-    week_day: "",
-    semester: 1,
-    quota: 20,
-    year: "2021",
-    location: "hkbu"
-
-
-
-
-
-})
+const course = ref([])
 // a function to get the booking from the backend
 const getCourse = async function () {
     // get the booking from the backend
