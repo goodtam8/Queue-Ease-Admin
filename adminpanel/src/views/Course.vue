@@ -154,7 +154,7 @@
     
                     </h5>
     
-                        <p class="card-text">{{ c.location }}</p>
+                        <p class="card-text">{{ c.cid }}</p>
     
     
     
@@ -168,15 +168,7 @@
     
                         </router-link>
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+       
     
     
     

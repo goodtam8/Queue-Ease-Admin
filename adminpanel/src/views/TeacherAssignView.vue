@@ -37,7 +37,7 @@ Teacher Name:{{ teacher.name }}
 <form class="container my-5" @submit.prevent="join">
 
     <select class="form-select" aria-label="Default select example" id="course" v-model="selectedcourse" required>
-        <option v-for="cs in course.courses" :key="cs" :value="cs._id"> {{ cs._id }} </option>
+        <option v-for="cs in course.courses" :key="cs" :value="cs._id"> {{ cs._id }}+ {{ cs.cid }} </option>
         </select>
 
 
