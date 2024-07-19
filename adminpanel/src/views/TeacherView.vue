@@ -154,7 +154,7 @@
     
     
                             </router-link>            
-                            <router-link :to="'/teacher/edit/'+pg._id" class="btn btn-success">
+                            <router-link :to="'/teacher/'+pg._id" class="btn btn-success">
     
                                 Edit
     
