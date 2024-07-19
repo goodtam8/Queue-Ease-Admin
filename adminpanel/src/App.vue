@@ -48,8 +48,8 @@
     
     
                         </ul>
-                        <form class="d-flex " role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <form class="d-flex " role="search" @submit.prevent="searchCourse">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="cid">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
     
@@ -75,13 +75,19 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { computed } from 'vue';
+import { computed ,ref} from 'vue';
 const router = useRouter();
 const route = useRoute();
-
+const cid=ref('');
 const logout = function() {
     localStorage.removeItem('token');
     location.reload();
+}
+
+const searchCourse = async function () {
+  
+   
+    router.push(`/search/${cid.value}`);
 }
 
 const hasToken = computed(() => {
