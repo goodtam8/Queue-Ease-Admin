@@ -169,7 +169,16 @@
                         </router-link>
     
        
+                        <router-link :to="'/assign/'+c._id" class="btn btn-primary" id="submitBtn">
     
+    
+    
+    Assign
+
+
+
+</router-link>
+
     
     
     
