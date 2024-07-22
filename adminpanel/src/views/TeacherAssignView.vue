@@ -36,10 +36,14 @@ Teacher Name:{{ teacher.name }}
 
 <form class="container my-5" @submit.prevent="join">
 
-    <select class="form-select" aria-label="Default select example" id="course" v-model="selectedcourse" required>
-        <option v-for="cs in course.courses" :key="cs" :value="cs._id"> {{ cs._id }}+ {{ cs.cid }} </option>
-        </select>
+    <select class="form-select" aria-label="Default select example" id="course" v-model="selectedcourse" required >
 
+        <option v-for="cs in course.courses" :key="cs._id" :value="cs._id" >
+
+      {{ cs._id }} + {{ cs.cid }}
+
+    </option>
+        </select>
 
         <button type="submit" class="btn btn-primary">Submit</button>
 </form>
@@ -91,7 +95,7 @@ const join = async function () {
 
 const getCourse = async function () {
     // get the booking from the backend
-    const response = await fetch('/api/course/cs/all' );
+    const response = await fetch('/api/course/cs/all/'+route.params.id );
     // convert the response to json
     const json = await response.json();
     // log the json

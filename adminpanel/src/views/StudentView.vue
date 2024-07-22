@@ -1,152 +1,268 @@
 <template>
+    <div>
     
-<section>
-    <o-table
-        :data="data"
-        :loading="loading"
-        paginated
-        backend-pagination
-        :total="total"
-        :per-page="perPage"
-        backend-sorting
-        :default-sort-direction="defaultSortOrder"
-        :default-sort="[sortField, sortOrder]"
-        aria-next-label="Next page"
-        aria-previous-label="Previous page"
-        aria-page-label="Page"
-        aria-current-label="Current page"
-        @page-change="onPageChange"
-        @sort="onSort">
-        <o-table-column
-            v-slot="props"
-            field="original_title"
-            label="Title"
-            sortable>
-            {{ props.row.original_title }}
-        </o-table-column>
-        <o-table-column
-            v-slot="props"
-            field="vote_average"
-            label="Vote Average"
-            numeric
-            sortable>
-            <span class="tag" :class="type(props.row.vote_average)">
-                {{ props.row.vote_average }}
-            </span>
-        </o-table-column>
-        <o-table-column
-            v-slot="props"
-            field="vote_count"
-            label="Vote Count"
-            numeric
-            sortable>
-            {{ props.row.vote_count }}
-        </o-table-column>
-        <o-table-column
-            v-slot="props"
-            field="release_date"
-            label="Release Date"
-            sortable
-            centered>
-            {{
-                props.row.release_date
-                    ? new Date(props.row.release_date).toLocaleDateString()
-                    : "unknown"
-            }}
-        </o-table-column>
-        <o-table-column v-slot="props" label="Overview" width="500">
-            {{ props.row.overview }}
-        </o-table-column>
-    </o-table>
-</section>
+        <nav aria-label="breadcrumb">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+            <ol class="breadcrumb">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                <li class="breadcrumb-item">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                    <router-link to="/">Home</router-link>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+                </li>
+    
+    
+    
+    
+    
+                <li class="breadcrumb-item active" aria-current="page">Student</li>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+            </ol>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        </nav>
+    
+        <ul class="list-group">
+    
+            <li class="list-group-item active" aria-current="true">Student</li>
+    
+    
+    
+            <div v-for="pg in student " :key="pg">
+    
+                <li class="list-group-item">{{ pg.name }}
+    
+                    <div class="row">
+    
+                        <div class="col text-end">
+    
+                                  
+                            <router-link :to="'/student/'+pg._id" class="btn btn-success">
+    
+                                Edit
+    
+                            </router-link>
+    
+                        </div>
+    
+                    </div>
+    
+                </li>
+    
+            </div>
+    
+        </ul>
+    
+        <nav aria-label="Page navigation example">
+    
+    
+    
+    <ul class="pagination" id="pagination">
 
 
+
+        <div v-for="pg in numbers " :key="pg">
+
+
+
+            <li class="page-item active" aria-current="page" v-if="pg===page">
+
+
+
+                <a class="page-link" v-on:click="setpage(pg)">{{ pg }}</a>
+
+
+
+            </li>
+
+
+
+            <li class="page-item" aria-current="page" v-else>
+
+
+
+                <a class="page-link" v-on:click="setpage(pg)">{{ pg }}</a>
+
+
+
+            </li>
+
+
+
+
+
+
+
+        </div>
+
+
+
+    </ul>
+
+
+
+</nav>
+    
+    
+    
+    </div>
 </template>
 
 <script setup>
+import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
 
+onMounted(async () => {
+    // if there is an id in the route
 
-import { ref, onMounted } from "vue";
+    getStudent();
 
-const data = ref([]);
-const total = ref(0);
-const loading = ref(false);
-const sortField = ref("vote_count");
-const sortOrder = ref("desc");
-const defaultSortOrder = ref("desc");
-const page = ref(1);
-const perPage = ref(20);
-
-const loadAsyncData = () => {
-    const params = [
-        "api_key=bb6f51bef07465653c3e553d6ab161a8",
-        "language=en-US",
-        "include_adult=false",
-        "include_video=false",
-        `sort_by=${sortField.value}.${sortOrder.value}`,
-        `page=${page.value}`,
-    ].join("&");
-    loading.value = true;
-    fetch(`https://api.themoviedb.org/3/discover/movie?${params}`)
-        .then((response) => response.json())
-        .then((result) => {
-            // api.themoviedb.org manage max 1000 pages
-            let currentTotal = result.total_results;
-            if (result.total_results / perPage.value > 100)
-                currentTotal = perPage.value * 100;
-
-            total.value = currentTotal;
-            data.value = result.results.map((item) => {
-                item.release_date = item.release_date
-                    ? item.release_date.replace(/-/g, "/")
-                    : null;
-                return item;
-            });
-            // cap results for usability
-            if (data.value.length > 10) data.value = data.value.slice(0, 5);
-            loading.value = false;
-        })
-        .catch((error) => {
-            data.value = [];
-            total.value = 0;
-            loading.value = false;
-            throw error;
-        });
-};
-
-/*
- * Handle page-change event
- */
-const onPageChange = (p) => {
-    page.value = p;
-    loadAsyncData();
-};
-
-/*
- * Handle sort event
- */
-const onSort = (column, order) => {
-    sortField.value = column?.field;
-    sortOrder.value = order;
-    loadAsyncData();
-};
-
-/*
- * Type style in relation to the value
- */
-const type = (value) => {
-    const number = parseFloat(value);
-    if (number < 6) {
-        return "is-danger";
-    } else if (number >= 6 && number < 8) {
-        return "is-warning";
-    } else if (number >= 8) {
-        return "is-success";
-    }
-};
-
-onMounted(() => {
-    loadAsyncData();
 });
+const page = ref(1);
+const perpage = ref(6);
+const total = ref(1);
+const totalpage = ref(1);
 
+
+const student = ref([])
+
+// A function to fetch a booking
+async function getStudent() {
+    const params = [
+        `page=${page.value}`
+    ]
+    // fetch the booking
+    const response = await fetch(`/api/student?${params}`);
+    // convert the response to json
+    const json = await response.json();
+    // return the json
+    student.value = json.student;
+    page.value = json.page;
+    perpage.value = json.perPage;
+    total.value = json.total
+    totalpage.value = total.value / perpage.value;
+
+
+
+}
+async function setpage(abc) {
+    page.value = abc;
+
+}
+
+const numbers = computed(() => {
+    return Array.from({ length: totalpage.value + 1 }, (_, index) => index + 1);
+});
+watch(() => page.value, () => {
+    getStudent();
+});
 </script>
+
+
