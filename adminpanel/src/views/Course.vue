@@ -317,7 +317,7 @@ async function setpage(abc) {
 }
 
 const numbers = computed(() => {
-    return Array.from({ length: totalpage.value + 1 }, (_, index) => index + 1);
+    return Array.from({ length: Math.ceil(totalpage.value) }, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
     getCourse();

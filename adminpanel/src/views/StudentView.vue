@@ -236,7 +236,7 @@ const student = ref([])
 // A function to fetch a booking
 async function getStudent() {
     const params = [
-        `page=${page.value}`
+        `page=${page.value}`,
     ]
     // fetch the booking
     const response = await fetch(`/api/student?${params}`);
@@ -246,9 +246,8 @@ async function getStudent() {
     student.value = json.student;
     page.value = json.page;
     perpage.value = json.perPage;
-    total.value = json.total
+    total.value = json.total;
     totalpage.value = total.value / perpage.value;
-
 
 
 }
@@ -258,7 +257,7 @@ async function setpage(abc) {
 }
 
 const numbers = computed(() => {
-    return Array.from({ length: totalpage.value + 1 }, (_, index) => index + 1);
+return Array.from({ length: Math.ceil(totalpage.value) }, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
     getStudent();
