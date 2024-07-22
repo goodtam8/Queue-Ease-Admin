@@ -91,6 +91,7 @@ const join = async function () {
     console.log(json);
     // alert the user
     alert(JSON.stringify(json));
+    getCourse();
 }
 
 const getCourse = async function () {

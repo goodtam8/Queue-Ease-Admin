@@ -296,6 +296,8 @@ const drop = async function (cid) {
     console.log(json);
     // alert the user
     alert(JSON.stringify(json));
+    getCourse();
+
    
 }
 // A function to update a booking with www-form-urlencoded data

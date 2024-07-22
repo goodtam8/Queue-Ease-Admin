@@ -419,16 +419,10 @@ const join = async function(sid) {
     console.log(json);
     // alert the user
     alert(JSON.stringify(json));
-    router.push(`/assign/${course.value._id}`)
+    getCourse()
+    getStudent()
 }
 
 // Use computed property to get the superheroes
-const instduentattendance = computed((sid) => {
-    if (course.value.student_list) {
-        return course.value.student_list.includes(sid);
-    }
-    return false;
 
-
-});
 </script>
