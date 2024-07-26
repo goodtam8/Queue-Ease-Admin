@@ -150,6 +150,39 @@ const course = ref({
 
 })
 
+function getTimeDifference(startTime, endTime) {
+  // Parse the start and end times into hours and minutes
+  const [startHours, startMinutes] = startTime.split(':').map(Number);
+  const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+  // Convert the start and end times to minutes
+  const startTotalMinutes = startHours * 60 + startMinutes;
+  const endTotalMinutes = endHours * 60 + endMinutes;
+
+  // Calculate the difference in minutes
+  let diffMinutes = endTotalMinutes - startTotalMinutes;
+
+  // If the difference is negative, we can assume the end time is on the next day
+  if (diffMinutes < 0) {
+    diffMinutes += 24 * 60; // Add 24 hours worth of minutes
+  }
+
+  // Convert the difference back into hours and minutes
+  const diffHours = Math.floor(diffMinutes / 60);
+
+
+
+  return diffHours;
+}
+
+// Example usage:
+const stime = "17:00";
+const etime = "20:00";
+const timeDifference = getTimeDifference(stime, etime);
+
+console.log(timeDifference); // Output: "03:00"
+
+
 const router = useRouter();
 async function comparetime(course) {
     let stime = course.value.start_time
@@ -164,9 +197,12 @@ async function comparetime(course) {
 
 
 const createcourse = async function() {
+// Example usage:
+const stime = "17:00";
+const etime = "20:00";
+const timeDifference = getTimeDifference(stime, etime);
 
-
-
+alert(timeDifference)
     const timecomparison = await comparetime(course)
     if (timecomparison === false) {
         alert(JSON.stringify("The end time of the course should be later than the start time "));
