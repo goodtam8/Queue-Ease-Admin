@@ -36,11 +36,11 @@ const router = createRouter({
     }, 
     {
       path: '/update/:id',
-      name: 'courseupdate',
+      name: 'restupdate',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/CourseUpdate.vue')
+      component: () => import('../views/RestaurantUpdate.vue')
     },
      {
       path: '/teacher/assign/:id',

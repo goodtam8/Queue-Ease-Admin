@@ -50,7 +50,7 @@
                         </li>  
     
     
-                        <li class="breadcrumb-item active" aria-current="page">Course</li>
+                        <li class="breadcrumb-item active" aria-current="page">Restaurant</li>
     
     
     
@@ -124,7 +124,7 @@
         <div class="row col-12 col-md-8 ">
     
     
-            <div class="col" v-for="c in course " :key="c">
+            <div class="col" v-for="c in rest " :key="c">
     
     
     
@@ -281,7 +281,7 @@ import { ref, onMounted, computed, watch, nextTick } from 'vue'
 onMounted(async () => {
     // if there is an id in the route
 
-    getCourse();
+    getRestaurant();
 
 });
 const page = ref(1);
@@ -290,19 +290,19 @@ const total = ref(1);
 const totalpage = ref(1);
 
 
-const course = ref([])
+const rest = ref([])
 
 // A function to fetch a booking
-async function getCourse() {
+async function getRestaurant() {
     const params = [
         `page=${page.value}`
     ]
     // fetch the booking
-    const response = await fetch(`/api/course?${params}`);
+    const response = await fetch(`/api/rest?${params}`);
     // convert the response to json
     const json = await response.json();
     // return the json
-    course.value = json.courses;
+    rest.value = json.rests;
     page.value = json.page;
     perpage.value = json.perPage;
     total.value = json.total
@@ -320,6 +320,6 @@ const numbers = computed(() => {
     return Array.from({ length: Math.ceil(totalpage.value) }, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
-    getCourse();
+    getRestaurant();
 });
 </script>
