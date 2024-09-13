@@ -7,7 +7,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">UniTrack</a>
+                    <a class="navbar-brand" href="#">QueueEase</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" v-if="hasToken">
                             <span class="navbar-toggler-icon" ></span>
                         </button>
@@ -21,28 +21,28 @@
                                 <router-link to="/" class="nav-link">Home</router-link>
                             </li>
                             <li v-if="$route.name === 'teacher'">
-                                <router-link to="/teacher" class="nav-link active">Teacher</router-link>
+                                <router-link to="/teacher" class="nav-link active">Staff</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/teacher" class="nav-link">Teacher</router-link>
+                                <router-link to="/teacher" class="nav-link">Staff</router-link>
                             </li>
                             <li v-if="$route.name === 'student'">
-                                <router-link to="/student" class="nav-link active">Student</router-link>
+                                <router-link to="/student" class="nav-link active">User</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/student" class="nav-link">Student</router-link>
+                                <router-link to="/student" class="nav-link">User</router-link>
                             </li>
-                            <li v-if="$route.name === 'course'">
-                                <router-link to="/course" class="nav-link active">Course</router-link>
+                            <li v-if="$route.name === 'restaurant'">
+                                <router-link to="/rest" class="nav-link active">Restaurant</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/course" class="nav-link">Course</router-link>
+                                <router-link to="/rest" class="nav-link">Restaurant</router-link>
                             </li>
                             <li v-if="$route.name === 'analytic'">
-                                <router-link to="/analytic" class="nav-link active">Anayltic</router-link>
+                                <router-link to="/analytic" class="nav-link active">Food</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/analytic" class="nav-link">Analytic</router-link>
+                                <router-link to="/analytic" class="nav-link">Food</router-link>
                             </li>
     
     
