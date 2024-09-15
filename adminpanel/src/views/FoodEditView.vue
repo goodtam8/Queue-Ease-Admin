@@ -1,6 +1,6 @@
 <template>
     <div>
-    <form @submit.prevent="updateStudent()">
+    <form @submit.prevent="updateFood()">
     
     
     
@@ -28,7 +28,7 @@
     
     
     
-                    <router-link to="/student">Student</router-link>
+                    <router-link to="/food">Food</router-link>
     
     
     
@@ -68,11 +68,11 @@
     
     
     
-                    <label for="formGroupExampleInput" class="form-label">SID</label>
+                    <label for="formGroupExampleInput" class="form-label">Name</label>
     
     
     
-                    <input type="text" class="form-control" id="sid" placeholder="210312" v-model="student.sid" disabled>
+                    <input type="text" class="form-control" id="sid" placeholder="210312" v-model="food.name" disabled>
     
     
     
@@ -84,31 +84,11 @@
     
     
     
-            <div class="col">
-    
-    
-    
-                <div class="mb-3">
-    
-    
-    
-                    <label for="formGroupExampleInput2" class="form-label">Name</label>
-    
-    
-    
-                    <input type="text" class="form-control" id="name" placeholder="Default" v-model="student.name" required>
-    
-    
-    
-                </div>
+           
     
     
     
     
-    
-    
-    
-            </div>
     
     
     
@@ -116,19 +96,10 @@
     
     
     
-        <div class="mb-3">
+       
     
     
-    
-            <label for="formGroupExampleInput" class="form-label">Password</label>
-    
-    
-    
-            <input type="text" class="form-control" id="password" placeholder="13:00" v-model="student.pw">
-    
-    
-    
-        </div>
+       
     
     
     
@@ -136,27 +107,11 @@
     
     
     
-            <label for="formGroupExampleInput" class="form-label">Gender</label>
+            <label for="formGroupExampleInput" class="form-label">price</label>
     
     
     
-            <input type="text" class="form-control" id="gender" placeholder="male" v-model="student.gender" disabled>
-    
-    
-    
-        </div>
-    
-    
-    
-        <div class="mb-3">
-    
-    
-    
-            <label for="formGroupExampleInput" class="form-label">Email</label>
-    
-    
-    
-            <input type="text" class="form-control" id="email" placeholder="hkbu.edu.hk" v-model="student.email">
+            <input type="number" class="form-control" id="price" placeholder="77" v-model="food.price">
     
     
     
@@ -176,11 +131,11 @@
     
     
     
-                    <label for="formGroupExampleInput" class="form-label">Phone</label>
+                    <label for="formGroupExampleInput" class="form-label">Img</label>
     
     
     
-                    <input type="number" class="form-control" id="phone" placeholder="142141" v-model="student.phone">
+                    <input type="number" class="form-control" id="phone" placeholder="142141" v-model="food.img">
     
     
     
@@ -247,9 +202,9 @@
 
 
 
-    <div v-for="pg in course " :key="pg">
+    <div v-for="pg in restaurant " :key="pg">
 
-        <li class="list-group-item" v-bind="selectedCourse">{{ pg.cid }}
+        <li class="list-group-item" v-bind="selectedRestaurant">{{ pg.cid }}
 
 
     <button type="button" class="btn btn-danger" v-on:click="drop(pg.cid)" >Drop</button>
@@ -267,24 +222,22 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-const student = ref({
-    _id: '',
-    sid: 1,
-    name: 'Credit Card',
-    pw: '',
-    gender: '',
-    email:"",
-    phone_num:121
+const food = ref({
+    _id:"ds",
+   name:"noodle",
+   price:10,
+   img:"www.dadsawaea"
+
 })
 
-const course=ref([])
-const selectedCourse = ref('');
+const restaurant=ref([])
+const selectedRestaurant = ref('');
 
 
 
 const drop = async function (cid) {
 
-    const response = await fetch(`/api/student/${student.value.sid}/${cid}/drop`, {
+    const response = await fetch(`/api/student/${food.value.name}/${cid}/drop`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -301,19 +254,19 @@ const drop = async function (cid) {
    
 }
 // A function to update a booking with www-form-urlencoded data
-async function updateStudent() {
+async function updateFood() {
     try {
         const token = localStorage.getItem('token');
 
 
-        const response = await fetch(`/api/student/${student.value._id}`, {
+        const response = await fetch(`/api/food/${food.value._id}`, {
             method: 'PUT',
             headers: {
                 
 
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(student.value)
+            body: JSON.stringify(food.value)
 
         });
         
@@ -326,37 +279,37 @@ async function updateStudent() {
     }
 }
 
-const getCourse = async function () {
+const getRest = async function () {
     // get the booking from the backend
-    const response = await fetch(`/api/student/${route.params.id}/get`);
+    const response = await fetch(`/api/food/${route.params.id}/get`);
     // convert the response to json
     const json = await response.json();
     // log the json
     console.log(json);
     // set the booking
  // set the booking, copy by value instead of reference
- course.value = json;
+ restaurant.value = json;
     // Wait for the change to get flushed to the DOM
    }
 
-const getStudent = async function () {
+const getFood = async function () {
     // get the booking from the backend
-    const response = await fetch('/api/student/' + route.params.id);
+    const response = await fetch('/api/food/' + route.params.id);
     // convert the response to json
     const json = await response.json();
     // log the json
     console.log(json);
     // set the booking
  // set the booking, copy by value instead of reference
- student.value = { ...json };
+ food.value = { ...json };
     // Wait for the change to get flushed to the DOM
     await nextTick();}
 
 onMounted(async () => {
     // if there is an id in the route
     if (route.params.id) {
-        getStudent();
-        getCourse();
+        getFood();
+        getRest();
     }
 });
 

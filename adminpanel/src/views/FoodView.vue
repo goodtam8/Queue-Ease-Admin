@@ -71,7 +71,7 @@
     
     
     
-                <li class="breadcrumb-item active" aria-current="page">Student</li>
+                <li class="breadcrumb-item active" aria-current="page">Food</li>
     
     
     
@@ -131,11 +131,11 @@
     
         <ul class="list-group">
     
-            <li class="list-group-item active" aria-current="true">Student</li>
+            <li class="list-group-item active" aria-current="true">Food</li>
     
     
     
-            <div v-for="pg in student " :key="pg">
+            <div v-for="pg in food " :key="pg">
     
                 <li class="list-group-item">{{ pg.name }}
     
@@ -144,7 +144,7 @@
                         <div class="col text-end">
     
                                   
-                            <router-link :to="'/student/'+pg._id" class="btn btn-success">
+                            <router-link :to="'/food/'+pg._id" class="btn btn-success">
     
                                 Edit
     
@@ -222,7 +222,7 @@ import { ref, onMounted, computed, watch, nextTick } from 'vue'
 onMounted(async () => {
     // if there is an id in the route
 
-    getStudent();
+    getFood();
 
 });
 const page = ref(1);
@@ -231,19 +231,19 @@ const total = ref(1);
 const totalpage = ref(1);
 
 
-const student = ref([])
+const food = ref([])
 
 // A function to fetch a booking
-async function getStudent() {
+async function getFood() {
     const params = [
         `page=${page.value}`,
     ]
     // fetch the booking
-    const response = await fetch(`/api/student?${params}`);
+    const response = await fetch(`/api/food?${params}`);
     // convert the response to json
     const json = await response.json();
     // return the json
-    student.value = json.student;
+    food.value = json.food;
     page.value = json.page;
     perpage.value = json.perPage;
     total.value = json.total;
@@ -260,7 +260,7 @@ const numbers = computed(() => {
 return Array.from({ length: Math.ceil(totalpage.value) }, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
-    getStudent();
+    getFood();
 });
 </script>
 

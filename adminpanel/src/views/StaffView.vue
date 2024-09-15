@@ -71,7 +71,7 @@
     
     
     
-                <li class="breadcrumb-item active" aria-current="page">Teacher</li>
+                <li class="breadcrumb-item active" aria-current="page">Staff</li>
     
     
     
@@ -125,11 +125,11 @@
     
         <ul class="list-group">
     
-            <li class="list-group-item active" aria-current="true">Teacher</li>
+            <li class="list-group-item active" aria-current="true">Staff</li>
     
     
     
-            <div v-for="pg in teacher " :key="pg">
+            <div v-for="pg in staff " :key="pg">
     
                 <li class="list-group-item">{{ pg.name }}
     
@@ -137,7 +137,7 @@
     
                         <div class="col text-end">
     
-                            <router-link :to="'/teacher/assign/'+pg._id" class="btn btn-secondary">
+                            <router-link :to="'/staff/assign/'+pg._id" class="btn btn-secondary">
     
     
     
@@ -148,7 +148,7 @@
     
     
                             </router-link>            
-                            <router-link :to="'/teacher/'+pg._id" class="btn btn-success">
+                            <router-link :to="'/staff/'+pg._id" class="btn btn-success">
     
                                 Edit
     
@@ -226,7 +226,7 @@ import { ref, onMounted, computed, watch, nextTick } from 'vue'
 onMounted(async () => {
     // if there is an id in the route
 
-    getTeacher();
+    getStaff();
 
 });
 const page = ref(1);
@@ -235,19 +235,19 @@ const total = ref(1);
 const totalpage = ref(1);
 
 
-const teacher = ref([])
+const staff = ref([])
 
 // A function to fetch a booking
-async function getTeacher() {
+async function getStaff() {
     const params = [
         `page=${page.value}`
     ]
     // fetch the booking
-    const response = await fetch(`/api/teacher?${params}`);
+    const response = await fetch(`/api/staff?${params}`);
     // convert the response to json
     const json = await response.json();
     // return the json
-    teacher.value = json.teacher;
+    staff.value = json.staffs;
     page.value = json.page;
     perpage.value = json.perPage;
     total.value = json.total
@@ -265,7 +265,7 @@ const numbers = computed(() => {
     return Array.from({ length: Math.ceil(totalpage.value)}, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
-    getTeacher();
+    getStaff();
 });
 </script>
 

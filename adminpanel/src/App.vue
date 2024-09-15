@@ -21,16 +21,16 @@
                                 <router-link to="/" class="nav-link">Home</router-link>
                             </li>
                             <li v-if="$route.name === 'teacher'">
-                                <router-link to="/teacher" class="nav-link active">Staff</router-link>
+                                <router-link to="/staff" class="nav-link active">Staff</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/teacher" class="nav-link">Staff</router-link>
+                                <router-link to="/staff" class="nav-link">Staff</router-link>
                             </li>
                             <li v-if="$route.name === 'student'">
-                                <router-link to="/student" class="nav-link active">User</router-link>
+                                <router-link to="/food" class="nav-link active">Food</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/student" class="nav-link">User</router-link>
+                                <router-link to="/food" class="nav-link">Food</router-link>
                             </li>
                             <li v-if="$route.name === 'restaurant'">
                                 <router-link to="/rest" class="nav-link active">Restaurant</router-link>
@@ -39,17 +39,17 @@
                                 <router-link to="/rest" class="nav-link">Restaurant</router-link>
                             </li>
                             <li v-if="$route.name === 'analytic'">
-                                <router-link to="/analytic" class="nav-link active">Food</router-link>
+                                <router-link to="/analytic" class="nav-link active">User</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/analytic" class="nav-link">Food</router-link>
+                                <router-link to="/analytic" class="nav-link">User</router-link>
                             </li>
     
     
     
                         </ul>
-                        <form class="d-flex " role="search" @submit.prevent="searchCourse">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="cid">
+                        <form class="d-flex " role="search" @submit.prevent="searchrestaurant">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="name">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
     
@@ -78,16 +78,16 @@ import { useRoute, useRouter } from "vue-router";
 import { computed ,ref} from 'vue';
 const router = useRouter();
 const route = useRoute();
-const cid=ref('');
+const name=ref('');
 const logout = function() {
     localStorage.removeItem('token');
     location.reload();
 }
 
-const searchCourse = async function () {
+const searchrestaurant = async function () {
   
    
-    router.push(`/search/${cid.value}`);
+    router.push(`/search/${name.value}`);
 }
 
 const hasToken = computed(() => {

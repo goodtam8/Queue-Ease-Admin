@@ -1,6 +1,6 @@
 <template>
     <div>
-    <form @submit.prevent="updateTeacher()">
+    <form @submit.prevent="updatteStaff()">
     
     
     
@@ -28,7 +28,7 @@
     
     
     
-                    <router-link to="/teacher">Teacher</router-link>
+                    <router-link to="/staff">Staff</router-link>
     
     
     
@@ -72,7 +72,7 @@
     
     
     
-                    <input type="text" class="form-control" id="staff_id" placeholder="210312" v-model="teacher.staff_id" disabled>
+                    <input type="text" class="form-control" id="staff_id" placeholder="210312" v-model="staff.sid" disabled>
     
     
     
@@ -96,7 +96,7 @@
     
     
     
-                    <input type="text" class="form-control" id="name" placeholder="Default" v-model="teacher.name" required>
+                    <input type="text" class="form-control" id="name" placeholder="Default" v-model="staff.name" required>
     
     
     
@@ -124,7 +124,7 @@
     
     
     
-            <input type="text" class="form-control" id="password" placeholder="13:00" v-model="teacher.pw">
+            <input type="text" class="form-control" id="password" placeholder="13:00" v-model="staff.pw">
     
     
     
@@ -140,7 +140,7 @@
     
     
     
-            <input type="text" class="form-control" id="gender" placeholder="male" v-model="teacher.gender" disabled>
+            <input type="text" class="form-control" id="gender" placeholder="male" v-model="staff.gender" disabled>
     
     
     
@@ -156,7 +156,7 @@
     
     
     
-            <input type="text" class="form-control" id="email" placeholder="hkbu.edu.hk" v-model="teacher.email">
+            <input type="text" class="form-control" id="email" placeholder="hkbu.edu.hk" v-model="staff.email">
     
     
     
@@ -180,7 +180,7 @@
     
     
     
-                    <input type="number" class="form-control" id="phone" placeholder="142141" v-model="teacher.phone">
+                    <input type="number" class="form-control" id="phone" placeholder="142141" v-model="staff.phone">
     
     
     
@@ -243,18 +243,17 @@
     <br>
     <ul class="list-group">
     
-    <li class="list-group-item active" aria-current="true">Course</li>
+    <li class="list-group-item active" aria-current="true">Restaurant</li>
 
 
 
-    <div v-for="pg in course " :key="pg">
 
-        <li class="list-group-item" v-bind="selectedCourse">{{ pg.cid }}
+        <li class="list-group-item" v-bind="selectedrestaurant" v-if="rest">{{ rest.name }}
 
 
-    <button type="button" class="btn btn-danger" v-on:click="drop(pg.cid)" >Drop</button>
+    <button type="button" class="btn btn-danger" v-on:click="drop(rest._id)" >Drop</button>
     </li>
-    </div>
+  
 </ul>
 
 </div>
@@ -267,24 +266,25 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-const teacher = ref({
+const staff = ref({
     _id: '',
-    staff_id: 1,
+    sid: 1,
     name: 'Credit Card',
     pw: '',
     gender: '',
     email:"",
     phone:121
 })
-
-const course=ref([])
-const selectedCourse = ref('');
+const rest = ref({
+  
+})
+const selectedrestaurant = ref('');
 
 
 
 const drop = async function (cid) {
 
-    const response = await fetch(`/api/teacher/${teacher.value.staff_id}/${cid}/drop`, {
+    const response = await fetch(`/api/staff/${staff.value.sid}/${cid}/drop`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -299,19 +299,19 @@ const drop = async function (cid) {
    
 }
 // A function to update a booking with www-form-urlencoded data
-async function updateTeacher() {
+async function updatteStaff() {
     try {
         const token = localStorage.getItem('token');
 
 
-        const response = await fetch(`/api/teacher/${teacher.value._id}`, {
+        const response = await fetch(`/api/staff/${staff.value._id}`, {
             method: 'PUT',
             headers: {
                 
 
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(teacher.value)
+            body: JSON.stringify(staff.value)
 
         });
         
@@ -324,37 +324,36 @@ async function updateTeacher() {
     }
 }
 
-const getCourse = async function () {
+const getrest = async function () {
     // get the booking from the backend
-    const response = await fetch(`/api/teacher/${route.params.id}/course`);
+    const response = await fetch(`/api/staff/${route.params.id}/get`);
     // convert the response to json
     const json = await response.json();
     // log the json
     console.log(json);
     // set the booking
- // set the booking, copy by value instead of reference
- course.value = json;
+ rest.value = json;
     // Wait for the change to get flushed to the DOM
    }
 
-const getTeacher = async function () {
+const getStaff = async function () {
     // get the booking from the backend
-    const response = await fetch('/api/teacher/' + route.params.id);
+    const response = await fetch('/api/staff/' + route.params.id);
     // convert the response to json
     const json = await response.json();
     // log the json
     console.log(json);
     // set the booking
  // set the booking, copy by value instead of reference
- teacher.value = { ...json };
+ staff.value = { ...json };
     // Wait for the change to get flushed to the DOM
     await nextTick();}
 
 onMounted(async () => {
     // if there is an id in the route
     if (route.params.id) {
-        getTeacher();
-        getCourse();
+        getStaff();
+        getrest();
     }
 });
 

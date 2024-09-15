@@ -12,7 +12,7 @@
 
         <li class="breadcrumb-item">
 
-            <router-link to="/teacher" >Teacher</router-link>
+            <router-link to="/staff" >Staff</router-link>
 
         </li>
 
@@ -29,18 +29,18 @@
   <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
 </svg>
 <div>
-Teacher Name:{{ teacher.name }}
+Staff Name:{{ staff.name }}
 
 </div>
 </div>
 
 <form class="container my-5" @submit.prevent="join">
 
-    <select class="form-select" aria-label="Default select example" id="course" v-model="selectedcourse" required >
+    <select class="form-select" aria-label="Default select example" id="restaurant" v-model="selectedrestaurant" required >
 
-        <option v-for="cs in course.courses" :key="cs._id" :value="cs._id" >
+        <option v-for="cs in rest.restaurants" :key="cs._id" :value="cs._id" >
 
-      {{ cs._id }} + {{ cs.cid }}
+      {{ cs._id }} + {{ cs.name }}
 
     </option>
         </select>
@@ -56,30 +56,30 @@ import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
-const course = ref([])
-const teacher = ref({
+const rest = ref([])
+const staff = ref({
     _id: '',
-    staff_id: 1,
+    sid: 1,
     name: 'Credit Card',
     pw: '',
     gender: '',
     email:"",
     phone:121
 })
-const selectedcourse=ref('');
+const selectedrestaurant=ref('');
 
 
 onMounted(async () => {
     // if there is an id in the route
     if (route.params.id) {
-        getCourse();
-        getTeacher();
+        getRest();
+        getStaff();
     }
 });
 
 const join = async function () {
     // post the booking to the backend
-    const response = await fetch(`/api/assign/${selectedcourse.value}/${teacher.value.staff_id}/teacher`, {
+    const response = await fetch(`/api/staff/${selectedrestaurant.value}/${staff.value.sid}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -91,31 +91,31 @@ const join = async function () {
     console.log(json);
     // alert the user
     alert(JSON.stringify(json));
-    getCourse();
+    getRest();
 }
 
-const getCourse = async function () {
+const getRest = async function () {
     // get the booking from the backend
-    const response = await fetch('/api/course/cs/all/'+route.params.id );
+    const response = await fetch('/api/rest/rest/all/' );
     // convert the response to json
     const json = await response.json();
     // log the json
     console.log(json);
     // set the booking
  // set the booking, copy by value instead of reference
- course.value = json;
+ rest.value = json;
     // Wait for the change to get flushed to the DOM
     await nextTick();}
 
 
-    const getTeacher = async function () {
+    const getStaff = async function () {
     // a function to get the booking from the backend
-    const response = await fetch('/api/teacher/' + route.params.id);
+    const response = await fetch('/api/staff/' + route.params.id);
     // convert the response to json
     const json = await response.json();
     // log the json
     console.log(json);
     // set the booking
-    teacher.value = json;
+    staff.value = json;
 }
 </script>

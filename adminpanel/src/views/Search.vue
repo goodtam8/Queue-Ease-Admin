@@ -77,7 +77,7 @@
             <div class="row col-12 col-md-8 ">
     
     
-    <div class="col" v-for="c in course " :key="c">
+    <div class="col" v-for="c in rest " :key="c">
 
 
 
@@ -107,7 +107,7 @@
 
             </h5>
 
-                <p class="card-text">{{ c.cid }}</p>
+                <p class="card-text">{{ c.name }}</p>
 
 
 
@@ -227,7 +227,7 @@ onMounted(async () => {
     // if there is an id in the route
     if (route.params.id) {
 
-    getCourse();
+    getRest();
 
 }});
 const page = ref(1);
@@ -236,21 +236,21 @@ const total = ref(1);
 const totalpage = ref(1);
 
 
-const course = ref([])
+const rest = ref([])
 
 // A function to fetch a booking
-async function getCourse() {
+async function getRest() {
     const params = [
-    `cid=${route.params.id}`    
+    `name=${route.params.id}`    
     ,
         `page=${page.value}`
     ].join("&")
     // fetch the booking
-    const response = await fetch(`/api/course?${params}`);
+    const response = await fetch(`/api/rest?${params}`);
     // convert the response to json
     const json = await response.json();
     // return the json
-    course.value = json.courses;
+    rest.value = json.rests;
     page.value = json.page;
     perpage.value = json.perPage;
     total.value = json.total
@@ -268,7 +268,7 @@ const numbers = computed(() => {
     return Array.from({ length:Math.ceil(totalpage.value) }, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
-    getCourse();
+    getRest();
 });
 
 </script>

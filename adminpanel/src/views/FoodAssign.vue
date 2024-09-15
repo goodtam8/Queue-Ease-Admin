@@ -24,7 +24,7 @@
     
     
     
-                    <router-link to="/course">Course</router-link>
+                    <router-link to="/rest">Restaurant</router-link>
     
     
     
@@ -64,7 +64,7 @@
     
         
     
-        </svg> {{ course.cid }} Student Assign
+        </svg> {{ restaurant.name }} Restaurant Assign
     
     
     
@@ -80,7 +80,7 @@
     
     
     
-            Remaining Quota:{{ course.quota }}
+            Remaining Quota:{{ restaurant.quota }}
     
     
     
@@ -100,7 +100,7 @@
     
     
     
-            <li class="list-group-item active" aria-current="true">Student</li>
+            <li class="list-group-item active" aria-current="true">Food</li>
     
     
     
@@ -116,7 +116,7 @@
     
     
     
-            <div v-for="pg in student " :key="pg.sid">
+            <div v-for="pg in food " :key="pg.name">
     
     
     
@@ -146,9 +146,9 @@
     
     
     
-                            <div v-if="course.student_list">
+                            <div v-if="restaurant.menu">
     
-                                <button type="button" class="btn btn-primary" v-on:click="join(pg.sid)" v-if="!course.student_list.includes(pg.sid)">Assign</button>
+                                <button type="button" class="btn btn-primary" v-on:click="join(pg.name)" v-if="!restaurant.menu.includes(pg.name)">Assign</button>
     
     
     
@@ -166,7 +166,7 @@
     
                             </div>
                             <div v-else>
-                                <button type="button" class="btn btn-primary" v-on:click="join(pg.sid)">Assign</button>
+                                <button type="button" class="btn btn-primary" v-on:click="join(pg.name)">Assign</button>
 
 
                             </div>
@@ -328,8 +328,8 @@ import { ref, onMounted, computed, watch, nextTick } from 'vue'
 onMounted(async () => {
     // if there is an id in the route
     if (route.params.id) {
-        getStudent();
-        getCourse();
+        getFood();
+        getRest();
 
     }
 });
@@ -340,36 +340,24 @@ const totalpage = ref(1);
 const router = useRouter();
 const route = useRoute();
 
-const student = ref([]);
-const course = ref({
-    _id: "",
-    cid: "",
-    cname: "",
-    start_time: "",
-    end_time: "",
-    week_day: "",
-    semester: 1,
-    quota: 20,
-    year: "2021",
-    location: "hkbu",
-    teacher: "default",
-    student_list: []
-
+const food = ref([]);
+const restaurant = ref({
+   
 
 
 })
 
 // A function to fetch a booking
-async function getStudent() {
+async function getFood() {
     const params = [
         `page=${page.value}`
     ]
     // fetch the booking
-    const response = await fetch(`/api/student?${params}`);
+    const response = await fetch(`/api/food?${params}`);
     // convert the response to json
     const json = await response.json();
     // return the json
-    student.value = json.student;
+    food.value = json.food;
     page.value = json.page;
     perpage.value = json.perPage;
     total.value = json.total
@@ -387,27 +375,27 @@ const numbers = computed(() => {
     return Array.from({ length: Math.ceil(totalpage.value) }, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
-    getStudent();
+    getFood();
 });
 
 // a function to get the booking from the backend
-const getCourse = async function() {
+const getRest = async function() {
     // get the booking from the backend
-    const response = await fetch('/api/course/id/' + route.params.id);
+    const response = await fetch('/api/rest/id/' + route.params.id);
     // convert the response to json
     const json = await response.json();
     // log the json
     console.log(json);
     // set the booking
     // set the booking, copy by value instead of reference
-    course.value = { ...json };
+    restaurant.value = { ...json };
     // Wait for the change to get flushed to the DOM
     await nextTick();
 }
 
 const join = async function(sid) {
     // post the booking to the backend
-    const response = await fetch(`/api/assign/${course.value._id}/${sid}/student`, {
+    const response = await fetch(`/api/food/${restaurant.value._id}/${sid}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
@@ -419,8 +407,8 @@ const join = async function(sid) {
     console.log(json);
     // alert the user
     alert(JSON.stringify(json));
-    getCourse()
-    getStudent()
+    getFood()
+    getRest()
 }
 
 // Use computed property to get the superheroes

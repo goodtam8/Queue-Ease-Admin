@@ -154,7 +154,7 @@
     
                     </h5>
     
-                        <p class="card-text">{{ c.cid }}</p>
+                        <p class="card-text">{{ c.name }}</p>
     
     
     

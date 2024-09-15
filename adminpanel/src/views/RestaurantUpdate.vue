@@ -172,6 +172,7 @@ const getRestaurant = async function () {
     // set the booking
  // set the booking, copy by value instead of reference
  rest.value = { ...json };
+ rest.value.outside=rest.value.outside?1:2 
     // Wait for the change to get flushed to the DOM
     await nextTick();}
 

@@ -43,12 +43,12 @@ const router = createRouter({
       component: () => import('../views/RestaurantUpdate.vue')
     },
      {
-      path: '/teacher/assign/:id',
-      name: 'teacherassign',
+      path: '/staff/assign/:id',
+      name: 'staffassign',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/TeacherAssignView.vue')
+      component: () => import('../views/StaffAssignView.vue')
     },
     {
       path: '/rest',
@@ -58,34 +58,34 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/Restaurant.vue')
     }, {
-      path: '/student',
-      name: 'student',
+      path: '/food',
+      name: 'food',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/StudentView.vue')
+      component: () => import('../views/FoodView.vue')
     },{
       path: '/detail/:id',
-      name: 'coursedetail',
+      name: 'restdetail',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/CourseDetail.vue')
+      component: () => import('../views/RestDetail.vue')
     },{
-      path: '/teacher',
-      name: 'teacher',
+      path: '/staff',
+      name: 'staff',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/TeacherView.vue')
+      component: () => import('../views/StaffView.vue')
     },
     {
-      path: '/teacher/:id',
-      name: 'teacheredit',
+      path: '/staff/:id',
+      name: 'staffedit',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/TeacherEdit.vue')
+      component: () => import('../views/StaffEdit.vue')
     },
     {
       path: '/search/:id',
@@ -97,18 +97,18 @@ const router = createRouter({
     },
     {
       path: '/assign/:id',
-      name: 'studentassign',
+      name: 'foodassiagn',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/StudentAssign.vue')
+      component: () => import('../views/FoodAssign.vue')
     },{
-      path: '/student/:id',
-      name: 'studentedit',
+      path: '/food/:id',
+      name: 'foodedit',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/StudentEditView.vue')
+      component: () => import('../views/FoodEditView.vue')
     },
   ]
 })
