@@ -34,11 +34,10 @@
 
         <div class="mb-3">
 
-            <label for="formGroupExampleInput" class="form-label">Img</label>
+<label for="formGroupExampleInput" class="form-label">Img</label>
 
-            <input type="text" class="form-control" id="img" placeholder="www.localimg:3000" v-model="rest.img" required>
-
-        </div>
+</div>
+<input type="file" @change="handleFileUpload">
 
     </div>
 
@@ -102,7 +101,7 @@
 
             <label for="formGroupExampleInput2" class="form-label">Number of Table</label>
 
-            <input type="number" class="form-control" id="numoftable" placeholder="30" v-model="rest.numoftable" min="10" max="50">
+            <input type="number" class="form-control" id="numoftable" placeholder="30" v-model="rest.numoftable" min="1" max="50">
 
         </div>
 
@@ -155,12 +154,37 @@
 
 <script setup>
 import { ref, onMounted, computed, watch, nextTick } from 'vue'
-
+import { ref as storageRef, deleteObject ,uploadBytes} from "firebase/storage";
+import storage from "@/firebase/init";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
 const rest = ref([])
+const selectedFile = ref(null);
+
+const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    selectedFile.value = file;
+}
+
+const uploadFile = async (_id) => {
+    if (selectedFile.value) {
+        const fileRef = storageRef(storage, `Restaurant/${_id}`);
+        await uploadBytes(fileRef, selectedFile.value); // Use uploadBytes instead of put
+        console.log('File Uploaded successfully')
+    }
+}
+const deleteImage=async(_id)=> {
+        const fileRef = storageRef(storage, `Restaurant/${_id}`); // Reference to the file to delete
+        try {
+            await deleteObject(fileRef);
+            console.log('Image deleted successfully');
+            // Optionally, update your state to remove the image from the UI
+        } catch (error) {
+            console.error('Error deleting image:', error);
+        }
+    }
 // a function to get the booking from the backend
 const getRestaurant = async function () {
     // get the booking from the backend
@@ -200,7 +224,7 @@ async function updateBooking() {
             body: JSON.stringify(rest.value)
 
         });
-        
+        uploadFile(rest.value._id);
         // convert the response to json
         const json = await response.json();
         // return the json
@@ -218,6 +242,7 @@ const deleteRestaurant = async function () {
     });
     // convert the response to json
     const json = await response.json();
+    deleteImage(rest.value._id);
     // log the json
     console.log(json);
     // alert the user

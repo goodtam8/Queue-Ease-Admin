@@ -8,11 +8,10 @@
                 <ul class="list-group">
 
 
-
-                    <li class="list-group-item list-group-item-secondary">Restaurant Image:{{ restaurant.img }}</li>
-
-
-
+                    <li class="list-group-item">
+                        <img v-if="imageUrl" :src="imageUrl" alt="Restaurant Image" class="card-img-top"
+                            style="width: 500px; height: auto;" />
+                    </li>
                     <li class="list-group-item">Restaurant Name:{{ restaurant.name }}</li>
 
 
@@ -61,25 +60,25 @@
 
 
 
-           
 
 
 
-             
-                <ul class="list-group">
+
+
+            <ul class="list-group">
 
 
 
-<li class="list-group-item">Food</li>
-    <li v-for="pg in restaurant.menu" :key="pg" class="list-group-item">
-        {{ pg }}
-        <div class="row">
-            <div class="col text-end">
-                <button type="button" class="btn btn-primary" v-on:click="drop(pg)">Drop</button>
-            </div>
-        </div>
-    </li>
-</ul>
+                <li class="list-group-item">Food</li>
+                <li v-for="pg in restaurant.menu" :key="pg" class="list-group-item">
+                    {{ pg }}
+                    <div class="row">
+                        <div class="col text-end">
+                            <button type="button" class="btn btn-primary" v-on:click="drop(pg)">Drop</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
 
 
         </div>
@@ -90,18 +89,33 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, nextTick } from 'vue'
+import storage from "@/firebase/init";
 
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
+import { getStorage, ref as storageRef, getDownloadURL } from "firebase/storage";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const restaurant = ref({
 
 
-   
+
 
 
 })
+const imageUrl = ref('');
+
+const fetchImage = async (imagePath) => {
+    try {
+        const fileRef = storageRef(storage, imagePath);
+        const url = await getDownloadURL(fileRef);
+        imageUrl.value = url;
+    } catch (error) {
+        console.error('Error fetching image:', error);
+    }
+};
+
+
 // a function to get the booking from the backend
 const getRest = async function () {
     // get the booking from the backend
@@ -113,6 +127,7 @@ const getRest = async function () {
     // set the booking
     // set the booking, copy by value instead of reference
     restaurant.value = { ...json };
+    fetchImage(`Restaurant/${restaurant.value._id}`);
     // Wait for the change to get flushed to the DOM
     await nextTick();
 }
