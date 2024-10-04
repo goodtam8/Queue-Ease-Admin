@@ -110,6 +110,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/FoodEditView.vue')
     },
+    {
+      path: '/user',
+      name: 'user',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/User.vue')
+    },
+    {
+      path: '/user/:id',
+      name: 'useredit',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/UserEdit.vue')
+    },
   ]
 })
 

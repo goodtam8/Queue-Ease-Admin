@@ -38,11 +38,11 @@
                             <li v-else>
                                 <router-link to="/rest" class="nav-link">Restaurant</router-link>
                             </li>
-                            <li v-if="$route.name === 'analytic'">
-                                <router-link to="/analytic" class="nav-link active">User</router-link>
+                            <li v-if="$route.name === 'user'">
+                                <router-link to="/user" class="nav-link active">User</router-link>
                             </li>
                             <li v-else>
-                                <router-link to="/analytic" class="nav-link">User</router-link>
+                                <router-link to="/user" class="nav-link">User</router-link>
                             </li>
     
     
