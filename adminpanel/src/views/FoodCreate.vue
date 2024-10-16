@@ -36,7 +36,7 @@
     
     
     
-                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                <li class="breadcrumb-item active" aria-current="page">CREATE</li>
     
     
     
@@ -72,7 +72,7 @@
     
     
     
-                    <input type="text" class="form-control" id="sid" placeholder="210312" v-model="food.name" disabled>
+                    <input type="text" class="form-control" id="sid" placeholder="210312" v-model="food.name" >
     
     
     
@@ -179,7 +179,7 @@
     
     
     
-        <button type="submit" class="btn btn-primary" id="submitBtn">Update</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">CREATE</button>
     
     
     
@@ -196,21 +196,7 @@
     
     </form>
     <br>
-    <ul class="list-group">
-    
-    <li class="list-group-item active" aria-current="true">Restaurant</li>
-
-
-
-    <div v-for="pg in restaurant " :key="pg">
-
-        <li class="list-group-item" v-bind="selectedRestaurant">{{ pg.name }}
-
-
-    <button type="button" class="btn btn-danger" v-on:click="drop(pg.name)" >Drop</button>
-    </li>
-    </div>
-</ul>
+   
 
 </div>
 </template>
@@ -235,32 +221,14 @@ const selectedRestaurant = ref('');
 
 
 
-const drop = async function (cid) {
-
-    const response = await fetch(`/api/student/${food.value.name}/${cid}/drop`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    // convert the response to json
-    const json = await response.json();
-    // log the json
-    console.log(json);
-    // alert the user
-    alert(JSON.stringify(json));
-    getFood();
-
-   
-}
 // A function to update a booking with www-form-urlencoded data
 async function updateFood() {
     try {
         const token = localStorage.getItem('token');
 
 
-        const response = await fetch(`/api/food/${food.value._id}`, {
-            method: 'PUT',
+        const response = await fetch(`/api/food/`, {
+            method: 'POST',
             headers: {
                 
 
@@ -279,39 +247,6 @@ async function updateFood() {
     }
 }
 
-const getRest = async function () {
-    // get the booking from the backend
-    const response = await fetch(`/api/food/${route.params.id}/get`);
-    // convert the response to json
-    const json = await response.json();
-    // log the json
-    console.log(json);
-    // set the booking
- // set the booking, copy by value instead of reference
- restaurant.value = json;
- console.log(restaurant.value)
-    // Wait for the change to get flushed to the DOM
-   }
 
-const getFood = async function () {
-    // get the booking from the backend
-    const response = await fetch('/api/food/' + route.params.id);
-    // convert the response to json
-    const json = await response.json();
-    // log the json
-    console.log(json);
-    // set the booking
- // set the booking, copy by value instead of reference
- food.value = { ...json };
-    // Wait for the change to get flushed to the DOM
-    await nextTick();}
-
-onMounted(async () => {
-    // if there is an id in the route
-    if (route.params.id) {
-        getFood();
-        getRest();
-    }
-});
 
 </script>

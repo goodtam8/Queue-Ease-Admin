@@ -1,198 +1,212 @@
 <template>
     <div>
-    
+
         <nav aria-label="breadcrumb">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <ol class="breadcrumb">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <li class="breadcrumb-item">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <router-link to="/">Home</router-link>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </li>
-    
-    
-    
-    
-    
+
+
+
+
+
                 <li class="breadcrumb-item active" aria-current="page">Food</li>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </ol>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </nav>
-    
+        <div class="col text-end">
+
+
+
+<router-link to='/food/create' class="btn btn-secondary" id="submitBtn">
+
+
+    New
+
+</router-link>
+
+</div>
+
+        
+
         <ul class="list-group">
-    
+
             <li class="list-group-item active" aria-current="true">Food</li>
-    
-    
-    
+
+
+
             <div v-for="pg in food " :key="pg">
-    
+
                 <li class="list-group-item">{{ pg.name }}
-    
+
                     <div class="row">
-    
+
                         <div class="col text-end">
-    
-                                  
-                            <router-link :to="'/food/'+pg._id" class="btn btn-success">
-    
+
+
+                            <router-link :to="'/food/' + pg._id" class="btn btn-success">
+
                                 Edit
-    
+
                             </router-link>
-    
+
                         </div>
-    
+
                     </div>
-    
+
                 </li>
-    
+
             </div>
-    
+
         </ul>
-    
+
         <nav aria-label="Page navigation example">
-    
-    
-    
-    <ul class="pagination" id="pagination">
 
 
 
-        <div v-for="pg in numbers " :key="pg">
+            <ul class="pagination" id="pagination">
 
 
 
-            <li class="page-item active" aria-current="page" v-if="pg===page">
+                <div v-for="pg in numbers " :key="pg">
 
 
 
-                <a class="page-link" v-on:click="setpage(pg)">{{ pg }}</a>
+                    <li class="page-item active" aria-current="page" v-if="pg === page">
 
 
 
-            </li>
+                        <a class="page-link" v-on:click="setpage(pg)">{{ pg }}</a>
 
 
 
-            <li class="page-item" aria-current="page" v-else>
+                    </li>
 
 
 
-                <a class="page-link" v-on:click="setpage(pg)">{{ pg }}</a>
+                    <li class="page-item" aria-current="page" v-else>
 
 
 
-            </li>
+                        <a class="page-link" v-on:click="setpage(pg)">{{ pg }}</a>
+
+
+
+                    </li>
 
 
 
@@ -200,18 +214,18 @@
 
 
 
-        </div>
+                </div>
 
 
 
-    </ul>
+            </ul>
 
 
 
-</nav>
-    
-    
-    
+        </nav>
+
+
+
     </div>
 </template>
 
@@ -257,11 +271,9 @@ async function setpage(abc) {
 }
 
 const numbers = computed(() => {
-return Array.from({ length: Math.ceil(totalpage.value) }, (_, index) => index + 1);
+    return Array.from({ length: Math.ceil(totalpage.value) }, (_, index) => index + 1);
 });
 watch(() => page.value, () => {
     getFood();
 });
 </script>
-
-
