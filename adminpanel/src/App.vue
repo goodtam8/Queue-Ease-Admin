@@ -3,17 +3,17 @@
         <header>
             <meta charset="utf-8">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
-    
             <meta name="viewport" content="width=device-width, initial-scale=1">
+
             <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">QueueEase</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" v-if="hasToken">
-                            <span class="navbar-toggler-icon" ></span>
-                        </button>
-                    <div class="collapse navbar-collapse" id="navbarNav" v-if="hasToken">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav" v-if="isLoggedIn">
                         <ul class="navbar-nav">
-    
                             <li v-if="$route.name === 'home'">
                                 <router-link to="/" class="nav-link active">Home</router-link>
                             </li>
@@ -44,54 +44,60 @@
                             <li v-else>
                                 <router-link to="/user" class="nav-link">User</router-link>
                             </li>
-    
-    
-    
                         </ul>
-                        <form class="d-flex " role="search" @submit.prevent="searchrestaurant">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="name">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-    
-    
-                    <div v-if="hasToken">
+                        <form class="d-flex" role="search" @submit.prevent="searchrestaurant">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                                v-model="name">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+
                         <button type="button" class="btn btn-primary my-4" @click="logout">Log Out</button>
                     </div>
-    
-    
-                    </div>
-                    
-    
                 </div>
-    
             </nav>
-    
         </header>
-    
+
+        <RouterView />
     </div>
-    
-    <RouterView/>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { computed ,ref} from 'vue';
+import { computed, ref, onMounted } from 'vue';
+
 const router = useRouter();
 const route = useRoute();
-const name=ref('');
-const logout = function() {
+const name = ref('');
+
+// Single source of truth for authentication state
+const isLoggedIn = ref(false);
+
+// Check token on component mount and set state
+onMounted(() => {
+    checkAuthStatus();
+});
+
+// Function to check authentication status
+const checkAuthStatus = () => {
+    isLoggedIn.value = localStorage.getItem('token') !== null;
+};
+
+// Logout function
+const logout = () => {
     localStorage.removeItem('token');
-    location.reload();
-}
+    isLoggedIn.value = false;
+    router.push('/login');
+};
 
 const searchrestaurant = async function () {
-  
-   
     router.push(`/search/${name.value}`);
-}
+};
 
-const hasToken = computed(() => {
-    return localStorage.getItem('token') !== null;
+// Watch for route changes to check auth status
+// This ensures navbar updates if token is added/removed on other pages
+router.beforeEach((to, from, next) => {
+    checkAuthStatus();
+    next();
 });
 </script>
 

@@ -130,10 +130,10 @@
                     <div class="card-body">
                         <h5 class="card-title">
                             <router-link :to="'/detail/' + c._id" class="nav-link">
-                                {{ c._id }}
+                                {{ c.name }}
                             </router-link>
                         </h5>
-                        <p class="card-text">{{ c.name }}</p>
+                        <p class="card-text">{{ c.type }}</p>
                         <router-link :to="'/update/' + c._id" class="btn btn-primary" id="submitBtn">Edit</router-link>
                         <router-link :to="'/assign/' + c._id" class="btn btn-primary"
                             id="submitBtn">Assign</router-link>
@@ -166,7 +166,7 @@
 
 
 
-                <div v-for="pg in numbers " :key="pg">
+                <div v-for="pg in numbers" :key="pg">
 
 
 
