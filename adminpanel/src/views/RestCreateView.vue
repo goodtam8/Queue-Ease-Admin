@@ -10,35 +10,36 @@
         </nav>
 
 
-        <div class="row">
-
-            <div class="col">
-
-                <div class="mb-3">
-
-                    <label for="formGroupExampleInput" class="form-label">Img</label>
-
-                </div>
-                <input type="file" @change="handleFileUpload">
-
-
-            </div>
-
-            <div class="col">
-
-                <div class="mb-3">
-
-                    <label for="formGroupExampleInput2" class="form-label">Name</label>
-
-                    <input type="text" class="form-control" id="name" placeholder="McDonald" v-model="rest.name"
-                        required>
-
+        <div class="col">
+            <div class="row g-3 align-items-center"> <!-- Added row with gutter spacing -->
+                <!-- Name Input Column -->
+                <div class="col-6"> <!-- 50% width -->
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput2" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="McDonald" v-model="rest.name"
+                            required>
+                    </div>
                 </div>
 
-
-
+                <!-- Image Upload Column -->
+                <div class="col-6"> <!-- 50% width -->
+                    <div class="mb-3 h-100"> <!-- Added h-100 for equal height -->
+                        <label class="form-label fw-bold">Restaurant Image</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="image-upload-container position-relative w-100">
+                                <input type="file" @change="handleFileUpload" class="form-control" accept="image/*"
+                                    id="imageUpload" hidden>
+                                <label for="imageUpload"
+                                    class="btn btn-outline-primary d-flex align-items-center gap-2 w-100">
+                                    <i class="bi bi-upload"></i>
+                                    {{ selectedFile ? 'Change Image' : 'Upload New Image' }}
+                                </label>
+                                <small class="ms-2 text-muted">(JPEG/PNG, max 5MB)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
 
         <div class="mb-3">
@@ -135,7 +136,7 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted, computed, watch, nextTick } from 'vue'
-import { getStorage, ref as storageRef,uploadBytes } from "firebase/storage"; // Import getStorage and ref
+import { getStorage, ref as storageRef, uploadBytes } from "firebase/storage"; // Import getStorage and ref
 
 const rest = ref({
     name: "",
@@ -152,8 +153,8 @@ const rest = ref({
 
 
 })
-const id=ref({
-    id:""
+const id = ref({
+    id: ""
 })
 const selectedFile = ref(null);
 
@@ -238,7 +239,7 @@ async function updateBooking(booking) {
 
         // convert the response to json
         const json = await response.json();
-        id.value=json;
+        id.value = json;
         uploadFile(id.value.id);
 
         // return the json
